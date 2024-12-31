@@ -7,22 +7,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(top: 8.0), // Añadir padding superior general
+      padding: const EdgeInsets.only(top: 8.0),
       child: AppBar(
         backgroundColor: AppColors.myWhite,
         leading: IconButton(
           icon: const Icon(Icons.settings),
-          onPressed: () {
-            // Acción al presionar el icono de tuerca
-          },
+          onPressed: () {},
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              // Acción al presionar el icono del carrito de compras
-            },
+            onPressed: () {},
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -33,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
         flexibleSpace: Padding(
-          padding: const EdgeInsets.only(top: 20.0), // Espacio superior
+          padding: const EdgeInsets.only(top: 20.0),
           child: Container(),
         ),
       ),

@@ -41,8 +41,7 @@ class HomeView extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child:
-                ReadingSection(), // Nueva sección ReadingSection posicionada en la parte inferior
+            child: ReadingSection(),
           ),
         ],
       ),

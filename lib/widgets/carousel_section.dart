@@ -35,7 +35,7 @@ class CarouselSection extends StatelessWidget {
           ),
           const SizedBox(height: 16.0),
           SizedBox(
-            height: 250.0, // Altura del carrusel
+            height: 250.0,
             child: BlocBuilder<BooktifyBloc, BooktifyState>(
               builder: (context, state) {
                 if (state.carouselStatus == CarouselStatus.loading) {
@@ -51,15 +51,13 @@ class CarouselSection extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final book = books[index];
                       return Container(
-                        width: MediaQuery.of(context).size.width /
-                            3, // Ajustar el ancho del contenedor
+                        width: MediaQuery.of(context).size.width / 3,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  8.0), // Borde redondeado
+                              borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(book.imageUrl,
                                   fit: BoxFit.cover, height: 150),
                             ),

@@ -8,4 +8,3 @@ abstract class BooktifyEvent extends Equatable {
 }
 
 class LoadCarouselEvent extends BooktifyEvent {}
-// Puedes agregar otros eventos aquí según sea necesario.
