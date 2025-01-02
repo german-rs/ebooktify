@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:booktify/models/book_model.dart'; // Importa BookModel
 
 class BooktifyState extends Equatable {
   const BooktifyState({
@@ -7,11 +8,11 @@ class BooktifyState extends Equatable {
   });
 
   final CarouselStatus carouselStatus;
-  final List<Book> books;
+  final List<BookModel> books;
 
   BooktifyState copyWith({
     CarouselStatus? carouselStatus,
-    List<Book>? books,
+    List<BookModel>? books,
   }) {
     return BooktifyState(
       carouselStatus: carouselStatus ?? this.carouselStatus,
@@ -24,20 +25,3 @@ class BooktifyState extends Equatable {
 }
 
 enum CarouselStatus { initial, loading, success, failure }
-
-class Book extends Equatable {
-  const Book({
-    required this.id,
-    required this.author,
-    required this.name,
-    required this.imageUrl,
-  });
-
-  final String id;
-  final String author;
-  final String name;
-  final String imageUrl;
-
-  @override
-  List<Object> get props => [id, author, name, imageUrl];
-}

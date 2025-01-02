@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'booktify_event.dart';
 import 'booktify_state.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:booktify/models/book_model.dart';
 
 class BooktifyBloc extends Bloc<BooktifyEvent, BooktifyState> {
   BooktifyBloc() : super(const BooktifyState()) {
@@ -21,11 +22,13 @@ class BooktifyBloc extends Bloc<BooktifyEvent, BooktifyState> {
       final data = response.data as Map<String, dynamic>;
       final books = data.entries.map((entry) {
         final bookData = entry.value as Map<String, dynamic>;
-        return Book(
+        return BookModel(
           id: entry.key,
           author: bookData['author'],
           name: bookData['name'],
           imageUrl: bookData['image_url'],
+          price: bookData['price'],
+          description: bookData['description'],
         );
       }).toList();
 
