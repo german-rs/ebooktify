@@ -1,5 +1,5 @@
 import 'package:booktify/models/book_model.dart';
-import 'package:booktify/utils/app_color.dart'; // Manteniendo el import correcto
+import 'package:booktify/utils/app_color.dart';
 import 'package:booktify/widgets/book_detail_section.dart';
 import 'package:booktify/widgets/detail_app_bar.dart';
 import 'package:flutter/material.dart';

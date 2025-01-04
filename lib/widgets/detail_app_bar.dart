@@ -15,9 +15,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.share),
-          onPressed: () {
-            // Acción al presionar el icono de compartir
-          },
+          onPressed: () {},
         ),
       ],
       iconTheme: const IconThemeData(color: Colors.black),

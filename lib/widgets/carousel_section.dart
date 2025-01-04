@@ -1,11 +1,9 @@
+import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:booktify/bloc/booktify_bloc.dart';
-import 'package:booktify/bloc/booktify_event.dart';
-import 'package:booktify/bloc/booktify_state.dart';
 import 'package:booktify/views/more_book_view.dart';
 import 'package:booktify/views/detail_book_view.dart';
-import 'package:booktify/models/book_model.dart'; // Importa BookModel
+import 'package:booktify/models/book_model.dart';
 
 class CarouselSection extends StatelessWidget {
   const CarouselSection({super.key});
@@ -13,7 +11,7 @@ class CarouselSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BooktifyBloc()..add(LoadCarouselEvent()),
+      create: (context) => CarouselBloc()..add(LoadCarouselEvent()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -58,14 +56,13 @@ class CarouselSection extends StatelessWidget {
   Widget _buildCarousel(BuildContext context) {
     return SizedBox(
       height: 250.0,
-      child: BlocBuilder<BooktifyBloc, BooktifyState>(
+      child: BlocBuilder<CarouselBloc, CarouselState>(
         builder: (context, state) {
           if (state.carouselStatus == CarouselStatus.loading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.carouselStatus == CarouselStatus.failure) {
             return const Center(child: Text('Failed to load books'));
           } else if (state.carouselStatus == CarouselStatus.success) {
-            // Limitar el número de libros a 5
             final books = state.books.take(5).toList();
             return ListView.builder(
               scrollDirection: Axis.horizontal,

@@ -6,15 +6,17 @@ class BookModel extends Equatable {
   final String name;
   final String imageUrl;
   final double price;
-  final String description; // Agregando el campo description
+  final String description;
+  final int quantity;
 
   const BookModel({
     required this.id,
     required this.author,
     required this.name,
     required this.imageUrl,
-    required this.price, // Incluyendo el campo price
-    required this.description, // Incluyendo el campo description
+    required this.price,
+    required this.description,
+    this.quantity = 1,
   });
 
   BookModel copyWith({
@@ -23,16 +25,17 @@ class BookModel extends Equatable {
     String? name,
     String? imageUrl,
     double? price,
-    String? description, // Agregando el campo description en copyWith
+    String? description,
+    int? quantity,
   }) {
     return BookModel(
       id: id ?? this.id,
       author: author ?? this.author,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
-      price: price ?? this.price, // Actualizando el campo price
-      description:
-          description ?? this.description, // Actualizando el campo description
+      price: price ?? this.price,
+      description: description ?? this.description,
+      quantity: quantity ?? this.quantity,
     );
   }
 
@@ -43,6 +46,7 @@ class BookModel extends Equatable {
         name,
         imageUrl,
         price,
-        description, // Incluyendo el campo description en props
+        description,
+        quantity,
       ];
 }

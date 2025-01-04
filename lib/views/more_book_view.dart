@@ -1,11 +1,9 @@
+import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:booktify/bloc/booktify_bloc.dart';
-import 'package:booktify/bloc/booktify_event.dart';
-import 'package:booktify/bloc/booktify_state.dart';
 import 'package:booktify/views/detail_book_view.dart';
-import 'package:booktify/models/book_model.dart'; // Importa BookModel
+import 'package:booktify/models/book_model.dart';
 
 class MoreBookView extends StatelessWidget {
   const MoreBookView({super.key});
@@ -27,8 +25,8 @@ class MoreBookView extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => BooktifyBloc()..add(LoadCarouselEvent()),
-        child: BlocBuilder<BooktifyBloc, BooktifyState>(
+        create: (context) => CarouselBloc()..add(LoadCarouselEvent()),
+        child: BlocBuilder<CarouselBloc, CarouselState>(
           builder: (context, state) {
             if (state.carouselStatus == CarouselStatus.loading) {
               return const Center(child: CircularProgressIndicator());

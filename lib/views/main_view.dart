@@ -28,6 +28,10 @@ class _MainViewState extends State<MainView> {
     });
   }
 
+  Color getBottomNavColor() {
+    return selectedIndex == 0 ? AppColors.myGreen : AppColors.myWhite;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +39,7 @@ class _MainViewState extends State<MainView> {
       bottomNavigationBar: Container(
         width: double.infinity,
         height: 80,
-        color: AppColors.myGreen,
+        color: getBottomNavColor(),
         child: Container(
           width: double.infinity,
           height: 80,
@@ -53,8 +57,8 @@ class _MainViewState extends State<MainView> {
               BottomMenuItem(
                 onTap: () => onItemTapped(0),
                 isActive: selectedIndex == 0,
-                title: "Home",
-                icon: MdiIcons.homeOutline,
+                title: "Explore",
+                icon: MdiIcons.compassOutline,
               ),
               BottomMenuItem(
                 onTap: () => onItemTapped(1),

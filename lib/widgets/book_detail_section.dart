@@ -1,8 +1,13 @@
+import 'package:booktify/bloc/favorites/favorites_bloc.dart';
+import 'package:booktify/bloc/favorites/favorites_event.dart';
+import 'package:booktify/bloc/favorites/favorites_state.dart';
 import 'package:booktify/models/book_model.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:flutter/material.dart';
-import 'info_container_widget.dart'; // Importando el nuevo widget para la información adicional del libro
-import 'detail_cart.dart'; // Importando el nuevo widget para el carrito de compras
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'info_container_widget.dart';
+import 'detail_cart.dart';
 
 class BookDetailSection extends StatelessWidget {
   final BookModel book;
@@ -11,90 +16,106 @@ class BookDetailSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity, // Abarcar todo el ancho de la pantalla
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: AppColors.myWhite,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 7, // 70% del ancho
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Price: \$${book.price}', // Precio real del libro desde la API
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      book.name,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      book.author,
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 3, // 30% del ancho
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.bookmark_border_outlined),
-                      onPressed: () {
-                        // Acción al presionar el icono de favorito
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16.0),
-          InfoContainerWidget(), // Usando el nuevo widget para la información adicional del libro
-          const SizedBox(height: 16.0),
-          Text(
-            'Description',
-            style: const TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
+    return BlocBuilder<FavoritesBloc, FavoritesState>(
+      builder: (context, state) {
+        final isFavorite = state.favorites.contains(book);
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: AppColors.myWhite,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
             ),
           ),
-          const SizedBox(height: 8.0),
-          Text(
-            book.description,
-            style: const TextStyle(fontSize: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 7,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '\$${book.price}',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            color: AppColors.myGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          book.name,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          book.author,
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.bookmark : Icons.bookmark_border,
+                            color: isFavorite ? AppColors.myGreen : Colors.grey,
+                          ),
+                          onPressed: () {
+                            if (isFavorite) {
+                              BlocProvider.of<FavoritesBloc>(context)
+                                  .add(RemoveFavoriteEvent(book));
+                            } else {
+                              BlocProvider.of<FavoritesBloc>(context)
+                                  .add(AddFavoriteEvent(book));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16.0),
+              InfoContainerWidget(),
+              const SizedBox(height: 16.0),
+              Text(
+                'Description',
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Text(
+                book.description,
+                style: const TextStyle(fontSize: 16.0),
+              ),
+              const SizedBox(height: 16.0),
+              DetailCart(book: book),
+            ],
           ),
-          const SizedBox(height: 16.0),
-          DetailCart(), // Usando el nuevo widget para el carrito de compras
-        ],
-      ),
+        );
+      },
     );
   }
 }
