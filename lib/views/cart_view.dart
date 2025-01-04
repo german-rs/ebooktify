@@ -76,7 +76,6 @@ class CartView extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          // Aquí irá la lógica del checkout
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Procesando checkout...'),

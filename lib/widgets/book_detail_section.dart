@@ -64,7 +64,7 @@ class BookDetailSection extends StatelessWidget {
                           book.author,
                           style: const TextStyle(
                             fontSize: 14.0,
-                            color: Colors.grey,
+                            color: AppColors.myDarkGrey,
                           ),
                         ),
                       ],
@@ -78,7 +78,9 @@ class BookDetailSection extends StatelessWidget {
                         IconButton(
                           icon: Icon(
                             isFavorite ? Icons.bookmark : Icons.bookmark_border,
-                            color: isFavorite ? AppColors.myGreen : Colors.grey,
+                            color: isFavorite
+                                ? AppColors.myGreen
+                                : AppColors.myMiddleGrey,
                           ),
                           onPressed: () {
                             if (isFavorite) {

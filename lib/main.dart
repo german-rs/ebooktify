@@ -2,7 +2,6 @@ import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:booktify/bloc/cart/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'bloc/favorites/favorites_bloc.dart';
 import 'views/main_view.dart';
 import 'utils/app_color.dart';

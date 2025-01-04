@@ -33,12 +33,12 @@ class BookItem extends StatelessWidget {
       ),
       subtitle: Text(
         book.author,
-        style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+        style: const TextStyle(fontSize: 14.0, color: AppColors.myDarkGrey),
       ),
       trailing: IconButton(
         icon: Icon(
           isFavorite ? Icons.bookmark : Icons.bookmark_border,
-          color: isFavorite ? AppColors.myGreen : Colors.grey,
+          color: isFavorite ? AppColors.myGreen : AppColors.myDarkGrey,
         ),
         onPressed: () {
           final bloc = context.read<FavoritesBloc>();
