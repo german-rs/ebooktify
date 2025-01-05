@@ -17,6 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddToCartEvent>(_onAddToCartEvent);
     on<UpdateCartQuantityEvent>(_onUpdateCartQuantityEvent);
     on<RemoveCartItemEvent>(_onRemoveCartItemEvent);
+    on<ClearCartEvent>(_onClearCartEvent);
   }
 
   void _onLoadCartEvent(LoadCartEvent event, Emitter<CartState> emit) async {
@@ -181,6 +182,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         status: CartStatus.failure,
         cartStatus: CartStatus.failure,
         error: 'Failed to remove item',
+      ));
+    }
+  }
+
+  void _onClearCartEvent(ClearCartEvent event, Emitter<CartState> emit) async {
+    try {
+      emit(state.copyWith(status: CartStatus.loading));
+
+      // Eliminar todos los items del carrito en la API
+      await _dio.delete("$urlCart.json");
+
+      // Actualizar el estado local
+      emit(CartState(
+        cart: [],
+        status: CartStatus.success,
+        cartStatus: CartStatus.success,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: CartStatus.failure,
+        error: 'Failed to clear cart: ${error.toString()}',
       ));
     }
   }

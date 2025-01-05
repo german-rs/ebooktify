@@ -14,6 +14,38 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
     on<LoadReadingEvent>(_onLoadReadingEvent);
     on<AddReadingEvent>(_onAddReadingEvent);
     on<RemoveReadingEvent>(_onRemoveReading);
+    on<UpdateReadingStatusEvent>(_onUpdateReadingStatus);
+  }
+
+  void _onUpdateReadingStatus(
+      UpdateReadingStatusEvent event, Emitter<ReadingState> emit) async {
+    try {
+      emit(state.copyWith(status: ReadingStatus.loading));
+
+      await _dio.patch(
+        "$urlReading/${event.book.id}.json",
+        data: {
+          "is_reading": event.isReading,
+        },
+      );
+
+      final updatedBooks = state.reading.map((book) {
+        if (book.id == event.book.id) {
+          return book.copyWith(isReading: event.isReading);
+        }
+        return book;
+      }).toList();
+
+      emit(state.copyWith(
+        reading: updatedBooks,
+        status: ReadingStatus.success,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: ReadingStatus.failure,
+        error: 'Failed to update reading status: ${error.toString()}',
+      ));
+    }
   }
 
   void _onLoadReadingEvent(
@@ -23,28 +55,37 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
 
     try {
       final response = await _dio.get("$urlReading.json");
-      final data = response.data as Map<String, dynamic>;
-      final books = data.entries.map((entry) {
-        final bookData = entry.value as Map<String, dynamic>;
-        return BookModel(
-          id: entry.key,
-          author: bookData['author'],
-          name: bookData['name'],
-          imageUrl: bookData['image_url'],
-          price: bookData['price'],
-          description: bookData['description'],
-        );
-      }).toList();
 
-      emit(state.copyWith(
+      if (response.data == null) {
+        emit(state.copyWith(
           status: ReadingStatus.success,
           readingStatus: ReadingStatus.success,
-          reading: books));
+          reading: [],
+        ));
+        return;
+      }
+
+      final data = response.data as Map<String, dynamic>;
+
+      final List<BookModel> books = [];
+
+      data.forEach((key, value) {
+        if (value is Map<String, dynamic>) {
+          books.add(BookModel.fromMap(key, value));
+        }
+      });
+
+      emit(state.copyWith(
+        status: ReadingStatus.success,
+        readingStatus: ReadingStatus.success,
+        reading: books,
+      ));
     } catch (error) {
       emit(state.copyWith(
-          status: ReadingStatus.failure,
-          readingStatus: ReadingStatus.failure,
-          error: 'Failed to load reading books'));
+        status: ReadingStatus.failure,
+        readingStatus: ReadingStatus.failure,
+        error: 'Failed to load reading books: ${error.toString()}',
+      ));
     }
   }
 
@@ -64,10 +105,12 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
         "$urlReading/${event.book.id}.json",
         data: {
           "id": event.book.id,
-          "author": event.book.name,
+          "author": event.book.author,
+          "name": event.book.name,
           "image_url": event.book.imageUrl,
           "price": event.book.price,
           "description": event.book.description,
+          "is_reading": event.book.isReading, // Añadido
         },
       );
 

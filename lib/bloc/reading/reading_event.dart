@@ -31,3 +31,13 @@ class RemoveReadingEvent extends ReadingEvent {
   @override
   List<Object> get props => [book];
 }
+
+class UpdateReadingStatusEvent extends ReadingEvent {
+  final BookModel book;
+  final bool isReading;
+
+  const UpdateReadingStatusEvent(this.book, this.isReading);
+
+  @override
+  List<Object> get props => [book, isReading];
+}
