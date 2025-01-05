@@ -22,7 +22,7 @@ class CarouselBloc extends Bloc<CarouselEvent, CarouselState> {
         carouselStatus: CarouselStatus.loading));
 
     try {
-      final response = await _dio.get(_url);
+      final response = await _dio.get("$_url.json");
 
       if (response.data == null || response.data is! Map<String, dynamic>) {
         throw Exception("La respuesta de la API no tiene el formato esperado.");

@@ -1,5 +1,6 @@
 import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:booktify/bloc/cart/cart_bloc.dart';
+import 'package:booktify/bloc/catalog/catalog_bloc.dart';
 import 'package:booktify/bloc/current_reading_bloc.dart';
 import 'package:booktify/bloc/reading/reading_bloc.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ void main() async {
         BlocProvider(create: (context) => CarouselBloc()),
         BlocProvider(create: (context) => ReadingBloc()),
         BlocProvider(create: (context) => CurrentReadingBloc()),
+        BlocProvider(create: (context) => CatalogBloc()),
       ],
       child: MaterialApp(
         theme: ThemeData(

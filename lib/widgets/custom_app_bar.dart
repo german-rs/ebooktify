@@ -1,5 +1,6 @@
 import 'package:booktify/bloc/cart/cart_bloc.dart';
 import 'package:booktify/views/cart_view.dart';
+import 'package:booktify/views/catalog_view.dart';
 import 'package:flutter/material.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
         backgroundColor: AppColors.myWhite,
         leading: IconButton(
           icon: const Icon(Icons.settings),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CatalogView()),
+            );
+          },
         ),
         actions: [
           Stack(
