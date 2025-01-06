@@ -2,6 +2,7 @@ import 'package:booktify/bloc/catalog/catalog_bloc.dart';
 import 'package:booktify/models/book_model.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:booktify/views/book_manager.dart';
+import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,31 +23,30 @@ class _CatalogViewState extends State<CatalogView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Catalogue of Books',
-          textAlign: TextAlign.center,
-        ),
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        type: AppBarType.catalog,
       ),
-      body: BlocBuilder<CatalogBloc, CatalogState>(
-        builder: (context, state) {
-          if (state.status == CatalogStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.status == CatalogStatus.success) {
-            return ListView.builder(
-              itemCount: state.books.length,
-              itemBuilder: (context, index) {
-                final book = state.books[index];
-                return _BookItem(book: book);
-              },
-            );
-          } else if (state.status == CatalogStatus.failure) {
-            return Center(child: Text('Error: ${state.error}'));
-          } else {
-            return const Center(child: Text('No hay libros disponibles'));
-          }
-        },
+      body: Container(
+        color: AppColors.myWhite,
+        child: BlocBuilder<CatalogBloc, CatalogState>(
+          builder: (context, state) {
+            if (state.status == CatalogStatus.loading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state.status == CatalogStatus.success) {
+              return ListView.builder(
+                itemCount: state.books.length,
+                itemBuilder: (context, index) {
+                  final book = state.books[index];
+                  return _BookItem(book: book);
+                },
+              );
+            } else if (state.status == CatalogStatus.failure) {
+              return Center(child: Text('Error: ${state.error}'));
+            } else {
+              return const Center(child: Text('No hay libros disponibles'));
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

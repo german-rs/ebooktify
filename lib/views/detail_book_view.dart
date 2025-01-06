@@ -1,7 +1,7 @@
 import 'package:booktify/models/book_model.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:booktify/widgets/book_detail_section.dart';
-import 'package:booktify/widgets/detail_app_bar.dart';
+import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class DetailBookView extends StatelessWidget {
@@ -13,7 +13,10 @@ class DetailBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.myGrey,
-      appBar: DetailAppBar(),
+      appBar: CustomAppBar(
+        type: AppBarType.detail,
+        title: 'Detail Book',
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -1,7 +1,7 @@
 import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:booktify/bloc/cart/cart_bloc.dart';
 import 'package:booktify/bloc/catalog/catalog_bloc.dart';
-import 'package:booktify/bloc/current_reading_bloc.dart';
+import 'package:booktify/bloc/reading/current/current_reading_bloc.dart';
 import 'package:booktify/bloc/reading/reading_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

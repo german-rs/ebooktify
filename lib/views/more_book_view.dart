@@ -1,5 +1,6 @@
 import 'package:booktify/bloc/carousel/carousel_bloc.dart';
 import 'package:booktify/utils/app_color.dart';
+import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:booktify/views/detail_book_view.dart';
@@ -12,17 +13,9 @@ class MoreBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.myWhite,
-      appBar: AppBar(
-        backgroundColor: AppColors.myWhite,
-        title: const Center(child: Text('More Books')),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_horiz),
-            onPressed: () {
-              // Acción al presionar el icono
-            },
-          ),
-        ],
+      appBar: CustomAppBar(
+        type: AppBarType.moreBooks,
+        onActionPressed: () {},
       ),
       body: BlocProvider(
         create: (context) => CarouselBloc()..add(LoadCarouselEvent()),

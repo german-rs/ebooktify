@@ -1,6 +1,7 @@
 import 'package:booktify/bloc/catalog/catalog_bloc.dart';
 import 'package:booktify/models/book_model.dart';
 import 'package:booktify/utils/app_color.dart';
+import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,12 +47,8 @@ class _BookManagerState extends State<BookManager> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Book Manager',
-          textAlign: TextAlign.center,
-        ),
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        type: AppBarType.bookManager,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

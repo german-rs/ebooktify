@@ -1,4 +1,6 @@
-import 'package:booktify/bloc/current_reading_bloc.dart';
+import 'package:booktify/bloc/reading/current/current_reading_bloc.dart';
+import 'package:booktify/widgets/progress_circle.dart';
+import 'package:booktify/widgets/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:booktify/utils/app_color.dart';
@@ -31,7 +33,7 @@ class ReadingSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
+              const Center(
                 child: Icon(
                   Icons.drag_handle,
                   color: Colors.white,
@@ -41,8 +43,8 @@ class ReadingSection extends StatelessWidget {
               const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'Continue Reading',
                     style: TextStyle(
                       fontSize: 18.0,
@@ -83,9 +85,7 @@ class ReadingSection extends StatelessWidget {
                       const SizedBox(width: 12.0),
                       Expanded(
                         child: Row(
-                          // Cambiamos Column por Row para poner el círculo a la derecha
                           children: [
-                            // Contenido principal (nombre, autor, estrellas)
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,60 +108,11 @@ class ReadingSection extends StatelessWidget {
                                       fontSize: 12.0,
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 4.0),
-                                    child: Row(
-                                      children: const [
-                                        Icon(Icons.star,
-                                            color: Colors.yellow, size: 16.0),
-                                        Icon(Icons.star,
-                                            color: Colors.yellow, size: 16.0),
-                                        Icon(Icons.star,
-                                            color: Colors.yellow, size: 16.0),
-                                        Icon(Icons.star,
-                                            color: Colors.yellow, size: 16.0),
-                                        Icon(Icons.star,
-                                            color: Colors.grey, size: 16.0),
-                                      ],
-                                    ),
-                                  ),
+                                  const RatingStars(),
                                 ],
                               ),
                             ),
-                            // Círculo de progreso
-                            Container(
-                              margin: const EdgeInsets.only(right: 16.0),
-                              width: 40,
-                              height: 40,
-                              child: Stack(
-                                children: [
-                                  // Círculo base (fondo blanco)
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  // Círculo de progreso
-                                  CustomPaint(
-                                    painter: ProgressPainter(
-                                      progress: 0.65, // 65%
-                                      progressColor: AppColors.myOrange,
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        '65%',
-                                        style: TextStyle(
-                                          color: AppColors.myOrange,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                            const ProgressCircle(progress: 0.65),
                           ],
                         ),
                       ),
@@ -189,41 +140,4 @@ class ReadingSection extends StatelessWidget {
       },
     );
   }
-}
-
-class ProgressPainter extends CustomPainter {
-  final double progress; // valor entre 0 y 1
-  final Color progressColor;
-
-  ProgressPainter({
-    required this.progress,
-    required this.progressColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Dibuja el arco de progreso
-    final paint = Paint()
-      ..color = progressColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2;
-
-    // El arco comienza desde arriba (-90 grados) y avanza en sentido horario
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -90 * (3.14159 / 180), // Convertir -90 grados a radianes
-      progress *
-          2 *
-          3.14159, // Convertir el progreso a radianes (360 grados = 2π)
-      false,
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

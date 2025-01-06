@@ -3,6 +3,7 @@ import 'package:booktify/bloc/reading/reading_bloc.dart';
 import 'package:booktify/utils/app_color.dart';
 import 'package:booktify/views/reading_view.dart';
 import 'package:booktify/widgets/cart_item.dart';
+import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,16 +15,8 @@ class CartView extends StatelessWidget {
     return BlocProvider.value(
       value: context.read<CartBloc>()..add(LoadCartEvent()),
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "Shopping Cart",
-            style: TextStyle(
-              color: AppColors.myDarkGrey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          iconTheme: const IconThemeData(color: Colors.black),
+        appBar: const CustomAppBar(
+          type: AppBarType.cart,
         ),
         bottomNavigationBar: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
@@ -180,40 +173,43 @@ class CartView extends StatelessWidget {
             );
           },
         ),
-        body: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            if (state.cartStatus == CartStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        body: Container(
+          color: AppColors.myWhite,
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state.cartStatus == CartStatus.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-            if (state.cartStatus == CartStatus.failure) {
-              return Center(
-                child: Text(state.error),
-              );
-            }
+              if (state.cartStatus == CartStatus.failure) {
+                return Center(
+                  child: Text(state.error),
+                );
+              }
 
-            if (state.cart.isEmpty) {
-              return const Center(
-                child: Text(
-                  "Sin productos agregados al carrito de compra",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.myDarkGrey,
-                    fontWeight: FontWeight.w500,
+              if (state.cart.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "Sin productos agregados al carrito de compra",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.myDarkGrey,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              );
-            }
+                );
+              }
 
-            return ListView.builder(
-              itemCount: state.cart.length,
-              padding: const EdgeInsets.only(bottom: 100),
-              itemBuilder: (context, index) {
-                final book = state.cart[index];
-                return CartItem(book: book);
-              },
-            );
-          },
+              return ListView.builder(
+                itemCount: state.cart.length,
+                padding: const EdgeInsets.only(bottom: 100),
+                itemBuilder: (context, index) {
+                  final book = state.cart[index];
+                  return CartItem(book: book);
+                },
+              );
+            },
+          ),
         ),
       ),
     );
