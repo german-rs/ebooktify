@@ -24,7 +24,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       emit(CartState(
         status: CartStatus.loading,
-        cartStatus: CartStatus.loading,
       ));
 
       final response = await _dio.get("$urlCart.json");
@@ -33,7 +32,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartState(
           cart: [],
           status: CartStatus.success,
-          cartStatus: CartStatus.success,
         ));
         return;
       }
@@ -56,12 +54,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartState(
         cart: cartItems,
         status: CartStatus.success,
-        cartStatus: CartStatus.success,
       ));
     } catch (error) {
       emit(CartState(
         status: CartStatus.failure,
-        cartStatus: CartStatus.failure,
         error: 'Failed to load cart',
       ));
     }
@@ -69,11 +65,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _onAddToCartEvent(AddToCartEvent event, Emitter<CartState> emit) async {
     try {
-      emit(CartState(
-        status: CartStatus.loading,
-        cartStatus: CartStatus.loading,
-        cart: state.cart,
-      ));
+      emit(state.copyWith(status: CartStatus.loading));
 
       final bookData = {
         "id": event.book.id,
@@ -101,26 +93,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           updatedCart.add(event.book);
         }
 
-        emit(CartState(
+        emit(state.copyWith(
           cart: updatedCart,
           status: CartStatus.success,
-          cartStatus: CartStatus.success,
         ));
-
-        add(LoadCartEvent());
       } else {
-        emit(CartState(
-          cart: state.cart,
+        emit(state.copyWith(
           status: CartStatus.failure,
-          cartStatus: CartStatus.failure,
           error: 'Failed to add to cart',
         ));
       }
     } catch (error) {
-      emit(CartState(
-        cart: state.cart,
+      emit(state.copyWith(
         status: CartStatus.failure,
-        cartStatus: CartStatus.failure,
         error: 'Failed to add to cart: ${error.toString()}',
       ));
     }
@@ -138,7 +123,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartState(
           cart: updatedCart,
           status: CartStatus.success,
-          cartStatus: CartStatus.success,
         ));
       } else {
         await _dio.patch(
@@ -152,14 +136,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartState(
           cart: updatedCart,
           status: CartStatus.success,
-          cartStatus: CartStatus.success,
         ));
       }
     } catch (_) {
       emit(CartState(
         cart: state.cart,
         status: CartStatus.failure,
-        cartStatus: CartStatus.failure,
         error: 'Failed to update quantity',
       ));
     }
@@ -174,13 +156,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartState(
         cart: updatedCart,
         status: CartStatus.success,
-        cartStatus: CartStatus.success,
       ));
     } catch (_) {
       emit(CartState(
         cart: state.cart,
         status: CartStatus.failure,
-        cartStatus: CartStatus.failure,
         error: 'Failed to remove item',
       ));
     }
@@ -190,14 +170,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       emit(state.copyWith(status: CartStatus.loading));
 
-      // Eliminar todos los items del carrito en la API
       await _dio.delete("$urlCart.json");
 
-      // Actualizar el estado local
       emit(CartState(
         cart: [],
         status: CartStatus.success,
-        cartStatus: CartStatus.success,
       ));
     } catch (error) {
       emit(state.copyWith(

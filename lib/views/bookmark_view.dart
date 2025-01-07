@@ -27,14 +27,19 @@ class _BookmarkViewState extends State<BookmarkView> {
         type: AppBarType.bookmark,
       ),
       body: Container(
-        // Agrega este Container
-        color: Colors.white, // Y coloca el color aquí
+        color: Colors.white,
         child: BlocBuilder<FavoritesBloc, FavoritesState>(
           builder: (context, state) {
+            if (state.status == FavoritesStatus.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
             if (state.favorites.isEmpty) {
               return const Center(
                 child: Text(
-                  'No hay libros marcados como favoritos',
+                  'No books marked as favourites',
                   style: TextStyle(fontSize: 16),
                 ),
               );

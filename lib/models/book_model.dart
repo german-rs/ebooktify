@@ -8,7 +8,7 @@ class BookModel extends Equatable {
   final double price;
   final String description;
   final int quantity;
-  final bool isReading; // Nuevo campo
+  final bool isReading;
 
   const BookModel({
     required this.id,
@@ -18,10 +18,9 @@ class BookModel extends Equatable {
     required this.price,
     required this.description,
     this.quantity = 1,
-    this.isReading = false, // Asignamos un valor por defecto
+    this.isReading = false,
   });
 
-  // Método factory para crear un BookModel desde un Map
   factory BookModel.fromMap(String id, Map<String, dynamic> map) {
     return BookModel(
       id: map['id'] as String? ?? id,
@@ -30,11 +29,10 @@ class BookModel extends Equatable {
       imageUrl: map['image_url'] as String? ?? '',
       price: (map['price'] as num?)?.toDouble() ?? 0.0,
       description: map['description'] as String? ?? '',
-      isReading: map['is_reading'] as bool? ?? false, // Manejo seguro de null
+      isReading: map['is_reading'] as bool? ?? false,
     );
   }
 
-  // Método para convertir el BookModel a un Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -55,7 +53,7 @@ class BookModel extends Equatable {
     double? price,
     String? description,
     int? quantity,
-    bool? isReading, // Añadido al copyWith
+    bool? isReading,
   }) {
     return BookModel(
       id: id ?? this.id,
@@ -65,7 +63,7 @@ class BookModel extends Equatable {
       price: price ?? this.price,
       description: description ?? this.description,
       quantity: quantity ?? this.quantity,
-      isReading: isReading ?? this.isReading, // Añadido al constructor
+      isReading: isReading ?? this.isReading,
     );
   }
 
@@ -78,6 +76,6 @@ class BookModel extends Equatable {
         price,
         description,
         quantity,
-        isReading, // Añadido a props
+        isReading,
       ];
 }

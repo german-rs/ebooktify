@@ -59,85 +59,103 @@ class ReadingSection extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16.0),
-              if (state.currentBook != null && state.isReading)
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.myWhite,
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  height: 100.0,
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16.0),
-                          bottomLeft: Radius.circular(16.0),
-                        ),
-                        child: Image.network(
-                          state.currentBook!.imageUrl,
-                          width: 70,
-                          height: 100,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.book),
-                        ),
-                      ),
-                      const SizedBox(width: 12.0),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    formatBookName(state.currentBook!.name),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.myBlack,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 4.0),
-                                  Text(
-                                    state.currentBook!.author,
-                                    style: const TextStyle(
-                                      color: AppColors.myDarkGrey,
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                  const RatingStars(),
-                                ],
-                              ),
-                            ),
-                            const ProgressCircle(progress: 0.65),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              else
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.myGrey,
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  height: 100.0,
-                  width: double.infinity,
-                  child: const Center(
-                    child: Text(
-                      'No book currently reading',
-                      style: TextStyle(color: AppColors.myBlack),
-                    ),
-                  ),
-                ),
+              _buildContent(state),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildContent(CurrentReadingState state) {
+    if (state.status == CurrentReadingStatus.loading) {
+      return Container(
+        height: 100.0,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.myWhite,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    if (state.currentBook != null && state.isReading) {
+      return Container(
+        decoration: BoxDecoration(
+          color: AppColors.myWhite,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        height: 100.0,
+        width: double.infinity,
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                bottomLeft: Radius.circular(16.0),
+              ),
+              child: Image.network(
+                state.currentBook!.imageUrl,
+                width: 70,
+                height: 100,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(Icons.book),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          formatBookName(state.currentBook!.name),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.myBlack,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          state.currentBook!.author,
+                          style: const TextStyle(
+                            color: AppColors.myDarkGrey,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        const RatingStars(),
+                      ],
+                    ),
+                  ),
+                  const ProgressCircle(progress: 0.65),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.myGrey,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      height: 100.0,
+      width: double.infinity,
+      child: const Center(
+        child: Text(
+          'No book currently reading',
+          style: TextStyle(color: AppColors.myBlack),
+        ),
+      ),
     );
   }
 }

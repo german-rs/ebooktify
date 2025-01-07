@@ -50,8 +50,7 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
 
   void _onLoadReadingEvent(
       LoadReadingEvent event, Emitter<ReadingState> emit) async {
-    emit(state.copyWith(
-        status: ReadingStatus.loading, readingStatus: ReadingStatus.loading));
+    emit(state.copyWith(status: ReadingStatus.loading));
 
     try {
       final response = await _dio.get("$urlReading.json");
@@ -59,7 +58,6 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
       if (response.data == null) {
         emit(state.copyWith(
           status: ReadingStatus.success,
-          readingStatus: ReadingStatus.success,
           reading: [],
         ));
         return;
@@ -77,13 +75,11 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
 
       emit(state.copyWith(
         status: ReadingStatus.success,
-        readingStatus: ReadingStatus.success,
         reading: books,
       ));
     } catch (error) {
       emit(state.copyWith(
         status: ReadingStatus.failure,
-        readingStatus: ReadingStatus.failure,
         error: 'Failed to load reading books: ${error.toString()}',
       ));
     }
@@ -110,7 +106,7 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
           "image_url": event.book.imageUrl,
           "price": event.book.price,
           "description": event.book.description,
-          "is_reading": event.book.isReading, // Añadido
+          "is_reading": event.book.isReading,
         },
       );
 

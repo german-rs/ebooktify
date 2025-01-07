@@ -10,10 +10,15 @@ part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   var uuid = const Uuid();
-  final Dio _dio = Dio();
-  final String _url = dotenv.env['API_URL'] ?? '';
+  final Dio _dio;
+  final String _url;
 
-  CatalogBloc() : super(const CatalogState()) {
+  CatalogBloc({
+    Dio? dio,
+    String? baseUrl,
+  })  : _dio = dio ?? Dio(),
+        _url = baseUrl ?? dotenv.env['API_URL'] ?? '',
+        super(const CatalogState()) {
     on<LoadCatalogEvent>(_onLoadCatalogEvent);
     on<DeleteBookEvent>(_onDeleteBookEvent);
     on<CreateNewBookEvent>(_onCreateNewBookEvent);
@@ -22,8 +27,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
   void _onLoadCatalogEvent(
       LoadCatalogEvent event, Emitter<CatalogState> emit) async {
-    emit(state.copyWith(
-        status: CatalogStatus.loading, catalogStatus: CatalogStatus.loading));
+    emit(state.copyWith(status: CatalogStatus.loading));
 
     try {
       final response = await _dio.get("$_url.json");
@@ -33,99 +37,114 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       }
 
       final data = response.data as Map<String, dynamic>;
-
-      final books = data.entries.map((entry) {
-        final bookData = entry.value as Map<String, dynamic>;
-
-        if (!bookData.containsKey('author') ||
-            !bookData.containsKey('name') ||
-            !bookData.containsKey('image_url') ||
-            !bookData.containsKey('price') ||
-            !bookData.containsKey('description')) {
-          throw Exception(
-              "Datos incompletos en el libro con ID: ${entry.key}. Datos: $bookData");
-        }
-
-        return BookModel(
-          id: entry.key,
-          author: bookData['author'],
-          name: bookData['name'],
-          imageUrl: bookData['image_url'],
-          price: (bookData['price'] as num).toDouble(),
-          description: bookData['description'],
-        );
-      }).toList();
-
-      emit(state.copyWith(
-          status: CatalogStatus.success,
-          catalogStatus: CatalogStatus.success,
-          books: books));
+      final books = _parseBooks(data);
+      emit(state.copyWith(status: CatalogStatus.success, books: books));
     } catch (error) {
       emit(state.copyWith(
           status: CatalogStatus.failure,
-          catalogStatus: CatalogStatus.failure,
           error: 'Error al cargar los libros: $error'));
     }
   }
 
   void _onCreateNewBookEvent(
       CreateNewBookEvent event, Emitter<CatalogState> emit) async {
-    final String prodUID = uuid.v1();
-    final data = {
-      "id": prodUID,
-      "author": event.author,
-      "name": event.name,
-      "description": event.description,
-      "image_url": event.imageUrl,
-      "price": event.price,
-    };
+    emit(state.copyWith(status: CatalogStatus.loading));
 
-    await _dio.put("$_url/$prodUID.json", data: data);
+    try {
+      final String prodUID = uuid.v1();
+      final data = {
+        "author": event.author,
+        "name": event.name,
+        "description": event.description,
+        "image_url": event.imageUrl,
+        "price": event.price,
+      };
 
-    final newProduct = BookModel(
-      id: prodUID,
-      author: event.author,
-      name: event.name,
-      description: event.description,
-      imageUrl: event.imageUrl,
-      price: event.price,
-    );
+      await _dio.put("$_url/$prodUID.json", data: data);
 
-    final updatedProducts = [...state.books, newProduct];
+      final newProduct = BookModel(
+        id: prodUID,
+        author: event.author,
+        name: event.name,
+        description: event.description,
+        imageUrl: event.imageUrl,
+        price: event.price,
+      );
 
-    emit(state.copyWith(books: updatedProducts));
+      final updatedProducts = [...state.books, newProduct];
+      emit(state.copyWith(
+          status: CatalogStatus.success, books: updatedProducts));
+    } catch (error) {
+      emit(state.copyWith(
+          status: CatalogStatus.failure,
+          error: 'Error al crear el libro: $error'));
+    }
   }
 
   void _onUpdateCatalogBookEvent(
       UpdateCatalogBookEvent event, Emitter<CatalogState> emit) async {
-    final book = event.bookModel;
+    emit(state.copyWith(status: CatalogStatus.loading));
 
-    await _dio.put("$_url/${book.id}.json", data: {
-      "author": book.author,
-      "name": book.name,
-      "description": book.name,
-      "image_url": book.imageUrl,
-      "price": book.price,
-    });
+    try {
+      final book = event.bookModel;
+      await _dio.put("$_url/${book.id}.json", data: {
+        "author": book.author,
+        "name": book.name,
+        "description": book.description,
+        "image_url": book.imageUrl,
+        "price": book.price,
+      });
 
-    final updatedProducts = [
-      for (var p in state.books)
-        if (p.id == book.id) book else p
-    ];
-
-    emit(state.copyWith(books: updatedProducts));
+      final updatedProducts = [
+        for (var p in state.books)
+          if (p.id == book.id) book else p
+      ];
+      emit(state.copyWith(
+          status: CatalogStatus.success, books: updatedProducts));
+    } catch (error) {
+      emit(state.copyWith(
+          status: CatalogStatus.failure,
+          error: 'Error al actualizar el libro: $error'));
+    }
   }
 
   void _onDeleteBookEvent(
       DeleteBookEvent event, Emitter<CatalogState> emit) async {
+    emit(state.copyWith(status: CatalogStatus.loading));
+
     try {
+      await _dio.delete("$_url/${event.bookId}.json");
+
       final updatedBooks =
           state.books.where((book) => book.id != event.bookId).toList();
-      emit(state.copyWith(books: updatedBooks));
+      emit(state.copyWith(status: CatalogStatus.success, books: updatedBooks));
     } catch (error) {
       emit(state.copyWith(
           status: CatalogStatus.failure,
           error: 'Error al eliminar el libro: $error'));
     }
+  }
+
+  List<BookModel> _parseBooks(Map<String, dynamic> data) {
+    return data.entries.map((entry) {
+      final bookData = entry.value as Map<String, dynamic>;
+
+      if (!bookData.containsKey('author') ||
+          !bookData.containsKey('name') ||
+          !bookData.containsKey('image_url') ||
+          !bookData.containsKey('price') ||
+          !bookData.containsKey('description')) {
+        throw Exception("Datos incompletos en el libro con ID: ${entry.key}");
+      }
+
+      return BookModel(
+        id: entry.key,
+        author: bookData['author'],
+        name: bookData['name'],
+        imageUrl: bookData['image_url'],
+        price: (bookData['price'] as num).toDouble(),
+        description: bookData['description'],
+      );
+    }).toList();
   }
 }

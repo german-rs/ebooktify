@@ -21,11 +21,11 @@ class MoreBookView extends StatelessWidget {
         create: (context) => CarouselBloc()..add(LoadCarouselEvent()),
         child: BlocBuilder<CarouselBloc, CarouselState>(
           builder: (context, state) {
-            if (state.carouselStatus == CarouselStatus.loading) {
+            if (state.status == CarouselStatus.loading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.carouselStatus == CarouselStatus.failure) {
+            } else if (state.status == CarouselStatus.failure) {
               return const Center(child: Text('Failed to load books'));
-            } else if (state.carouselStatus == CarouselStatus.success) {
+            } else if (state.status == CarouselStatus.success) {
               return _buildBookGrid(context, state.books);
             }
             return const SizedBox.shrink();

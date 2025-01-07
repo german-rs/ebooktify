@@ -18,10 +18,9 @@ class DetailCartState extends State<DetailCart> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CartBloc, CartState>(
-      listenWhen: (previous, current) =>
-          previous.cartStatus != current.cartStatus,
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.cartStatus == CartStatus.success) {
+        if (state.status == CartStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${widget.book.name} added to cart'),
@@ -34,7 +33,7 @@ class DetailCartState extends State<DetailCart> {
               ),
             ),
           );
-        } else if (state.cartStatus == CartStatus.failure) {
+        } else if (state.status == CartStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.error)),
           );
@@ -90,7 +89,7 @@ class DetailCartState extends State<DetailCart> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  onPressed: state.cartStatus == CartStatus.loading
+                  onPressed: state.status == CartStatus.loading
                       ? null
                       : () {
                           final bookToAdd = widget.book.copyWith(
@@ -100,7 +99,7 @@ class DetailCartState extends State<DetailCart> {
                                 AddToCartEvent(bookToAdd),
                               );
                         },
-                  child: state.cartStatus == CartStatus.loading
+                  child: state.status == CartStatus.loading
                       ? const SizedBox(
                           height: 20,
                           width: 20,

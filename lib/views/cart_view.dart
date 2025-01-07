@@ -78,7 +78,6 @@ class CartView extends StatelessWidget {
                           final navigator = Navigator.of(context);
 
                           try {
-                            // Mostrar diálogo de confirmación
                             final confirm = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
@@ -101,7 +100,6 @@ class CartView extends StatelessWidget {
                             );
 
                             if (confirm == true) {
-                              // Guardar referencia al ScaffoldMessenger antes de las operaciones asíncronas
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                   content: Text('Procesando compra...'),
@@ -109,22 +107,17 @@ class CartView extends StatelessWidget {
                                 ),
                               );
 
-                              // Añadir cada libro del carrito a Reading
                               for (var book in state.cart) {
                                 readingBloc.add(AddReadingEvent(book));
                               }
 
-                              // Esperar un momento para asegurar que los libros se han añadido
                               await Future.delayed(
                                   const Duration(milliseconds: 500));
 
-                              // Limpiar el carrito
                               cartBloc.add(const ClearCartEvent());
 
-                              // Verificar si el widget sigue montado
                               if (context.mounted) {
-                                scaffoldMessenger
-                                    .clearSnackBars(); // Limpiar SnackBars anteriores
+                                scaffoldMessenger.clearSnackBars();
                                 scaffoldMessenger.showSnackBar(
                                   const SnackBar(
                                     content:
@@ -134,7 +127,6 @@ class CartView extends StatelessWidget {
                                   ),
                                 );
 
-                                // Navegar a ReadingView
                                 navigator.push(
                                   MaterialPageRoute(
                                       builder: (context) =>
@@ -144,8 +136,7 @@ class CartView extends StatelessWidget {
                             }
                           } catch (error) {
                             if (context.mounted) {
-                              scaffoldMessenger
-                                  .clearSnackBars(); // Limpiar SnackBars anteriores
+                              scaffoldMessenger.clearSnackBars();
                               scaffoldMessenger.showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -177,11 +168,11 @@ class CartView extends StatelessWidget {
           color: AppColors.myWhite,
           child: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
-              if (state.cartStatus == CartStatus.loading) {
+              if (state.status == CartStatus.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (state.cartStatus == CartStatus.failure) {
+              if (state.status == CartStatus.failure) {
                 return Center(
                   child: Text(state.error),
                 );
@@ -190,7 +181,7 @@ class CartView extends StatelessWidget {
               if (state.cart.isEmpty) {
                 return const Center(
                   child: Text(
-                    "Sin productos agregados al carrito de compra",
+                    "No products added to the shopping cart",
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.myDarkGrey,

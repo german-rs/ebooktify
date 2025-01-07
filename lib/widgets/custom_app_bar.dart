@@ -130,7 +130,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               BlocBuilder<CartBloc, CartState>(
                 builder: (context, state) {
-                  if (state.cartStatus == CartStatus.loading ||
+                  if (state.status == CartStatus.loading ||
                       state.cart.isEmpty) {
                     return const SizedBox.shrink();
                   }

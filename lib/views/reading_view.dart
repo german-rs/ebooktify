@@ -167,6 +167,7 @@ class BookCard extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
+      color: AppColors.myGrey,
       child: Row(
         children: [
           Expanded(
