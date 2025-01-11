@@ -1,10 +1,7 @@
-import 'package:booktify/bloc/favorites/favorites_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:booktify/viewmodel/favorites_viewmodel.dart';
 import 'package:booktify/models/book_model.dart';
 import 'package:booktify/utils/app_color.dart';
-
-import '../bloc/favorites/favorites_event.dart';
 
 class BookItem extends StatelessWidget {
   final BookModel book;
@@ -13,9 +10,8 @@ class BookItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = context.select<FavoritesBloc, bool>(
-      (bloc) => bloc.state.favorites.contains(book),
-    );
+    final viewModel = FavoritesViewModel(context);
+    final isFavorite = viewModel.favorites.contains(book);
 
     return ListTile(
       leading: ClipRRect(
@@ -41,11 +37,10 @@ class BookItem extends StatelessWidget {
           color: isFavorite ? AppColors.myGreen : AppColors.myDarkGrey,
         ),
         onPressed: () {
-          final bloc = context.read<FavoritesBloc>();
           if (isFavorite) {
-            bloc.add(RemoveFavoriteEvent(book));
+            viewModel.removeFavorite(book);
           } else {
-            bloc.add(AddFavoriteEvent(book));
+            viewModel.addFavorite(book);
           }
         },
       ),

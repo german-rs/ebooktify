@@ -1,7 +1,8 @@
-import 'package:booktify/bloc/carousel/carousel_bloc.dart';
-import 'package:booktify/utils/app_color.dart';
+import 'package:booktify/viewmodel/carousel_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:booktify/bloc/carousel/carousel_bloc.dart';
+import 'package:booktify/utils/app_color.dart';
 import 'package:booktify/views/more_book_view.dart';
 import 'package:booktify/views/detail_book_view.dart';
 import 'package:booktify/models/book_model.dart';
@@ -59,12 +60,14 @@ class CarouselSection extends StatelessWidget {
       height: 250.0,
       child: BlocBuilder<CarouselBloc, CarouselState>(
         builder: (context, state) {
-          if (state.status == CarouselStatus.loading) {
+          final viewModel = CarouselViewModel(context);
+
+          if (viewModel.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state.status == CarouselStatus.failure) {
-            return const Center(child: Text('Failed to load books'));
+          } else if (viewModel.error != null) {
+            return Center(child: Text(viewModel.error!));
           } else if (state.status == CarouselStatus.success) {
-            final books = state.books.take(5).toList();
+            final books = viewModel.trendingBooks;
             return ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: books.length,
