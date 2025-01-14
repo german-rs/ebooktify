@@ -20,7 +20,8 @@ class DetailCartState extends State<DetailCart> {
     return BlocListener<CartBloc, CartState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.status == CartStatus.success) {
+        if (state.status == CartStatus.success &&
+            state.status != CartStatus.purchaseSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${widget.book.name} added to cart'),
@@ -38,6 +39,7 @@ class DetailCartState extends State<DetailCart> {
             SnackBar(content: Text(state.error)),
           );
         }
+        // Ignorar el estado purchaseSuccess
       },
       child: Row(
         children: [

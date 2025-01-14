@@ -169,7 +169,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: const CircleAvatar(
-              backgroundImage: AssetImage('assets/img/person.jpg'),
+              backgroundImage: AssetImage('assets/img/avatar.jpg'),
               radius: 16,
             ),
           ),

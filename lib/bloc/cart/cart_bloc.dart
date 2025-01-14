@@ -174,7 +174,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       emit(CartState(
         cart: [],
-        status: CartStatus.success,
+        // status: CartStatus.success,
+        status: CartStatus.purchaseSuccess,
       ));
     } catch (error) {
       emit(state.copyWith(

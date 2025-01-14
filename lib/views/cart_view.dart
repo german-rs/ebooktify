@@ -1,7 +1,9 @@
 import 'package:booktify/bloc/cart/cart_bloc.dart';
 import 'package:booktify/bloc/reading/reading_bloc.dart';
 import 'package:booktify/utils/app_color.dart';
-import 'package:booktify/views/reading_view.dart';
+// import 'package:booktify/views/home_view.dart';
+import 'package:booktify/views/main_view.dart';
+// import 'package:booktify/views/reading_view.dart';
 import 'package:booktify/widgets/cart_item.dart';
 import 'package:booktify/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -120,17 +122,18 @@ class CartView extends StatelessWidget {
                                 scaffoldMessenger.clearSnackBars();
                                 scaffoldMessenger.showSnackBar(
                                   const SnackBar(
-                                    content:
-                                        Text('¡Compra realizada con éxito!'),
+                                    content: Center(
+                                      child:
+                                          Text('¡Compra realizada con éxito!'),
+                                    ),
                                     backgroundColor: Colors.green,
                                     duration: Duration(seconds: 2),
                                   ),
                                 );
 
-                                navigator.push(
+                                navigator.pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ReadingView()),
+                                      builder: (context) => const MainView()),
                                 );
                               }
                             }

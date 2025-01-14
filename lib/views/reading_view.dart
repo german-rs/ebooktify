@@ -171,11 +171,10 @@ class BookCard extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 7,
             child: _BookInfo(book: book),
           ),
-          Expanded(
-            flex: 3,
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
             child: _ReadingButton(book: book),
           ),
         ],
@@ -239,11 +238,14 @@ class _ReadingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: const EdgeInsets.only(right: 8.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: book.isReading ? Colors.grey : AppColors.myOrange,
           alignment: Alignment.center,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
         onPressed: () => _handleReadingStatus(context),
         child: Text(
