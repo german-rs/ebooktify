@@ -39,7 +39,6 @@ class DetailCartState extends State<DetailCart> {
             SnackBar(content: Text(state.error)),
           );
         }
-        // Ignorar el estado purchaseSuccess
       },
       child: Row(
         children: [
