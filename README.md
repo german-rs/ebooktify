@@ -10,14 +10,7 @@ Esta aplicación fue creada como proyecto final para un curso avanzado de Flutte
 
 | Principal | Más libros | Detalle | Carro de compra |
 |-----------|-----------|-----------|-----------|
-|![Pantalla principal](./assets/img/main.jpg)|![Pantalla mas libros](./assets/img/more_book.jpg.jpg)|![Pantalla detalle del libro](./assets/img/detail.jpg)|![Pantalla carro de compra](./assets/img/cart.jpg.jpg)|
-
-
-
-
-
-
-
+|![Pantalla principal](./assets/img/main.jpg)|![Pantalla mas libros](./assets/img/more_book.jpg)|![Pantalla detalle del libro](./assets/img/detail.jpg)|![Pantalla carro de compra](./assets/img/cart.jpg)|
 
 
 
