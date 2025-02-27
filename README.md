@@ -1,4 +1,4 @@
-# eBooktify
+# eBooktify ![License](https://img.shields.io/github/license/german-rs/ebooktify)
 
 ## Descripción.
 
